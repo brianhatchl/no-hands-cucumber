@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>Integration testing and code coverage with Cucumber, Capybara, and Istanbul</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css">
@@ -24,8 +24,137 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+			<section data-markdown>
+				<script type="text/template">
+					### Integration testing and code coverage with Cucumber, Capybara, and Istanbul
+				</script>
+			</section>
+			<section data-markdown>
+				<script type="text/template">
+					### cu·cum·ber
+					/ˈkyo͞oˌkəmbər/
+					1. a widely cultivated plant in the gourd family
+					2. __a framework to run behavior driven development (BDD) tests__ <!-- .element: class="fragment" -->
+				</script>
+			</section>
+			<section data-markdown>
+				<script type="text/template">
+					### cap·y·ba·ra
+					/ˌkapəˈberə,-ˈbärə/
+					1. the largest rodent in the world
+					2. __a framework used to simulate a user interacting with a web app__ <!-- .element: class="fragment" -->
+				</script>
+			</section>
+			<section data-markdown>
+				<script type="text/template">
+					### is·tan·bul
+					/ˌɪstænˈbuːl/
+					1. a city in Turkey that straddles Europe and Asia
+					2. __yet another javascript code coverage tool__ <!-- .element: class="fragment" -->
+				</script>
+			</section>
+			<section data-markdown>
+				<script type="text/template">
+					### Cucumber with Capybara
+					* testing stack primarily written for/used by the ruby/rails community
+					* there are lots of test framework choices out there
+					* an intrepid hoot developer wrote some example tests using this so here we are
+				</script>
+			</section>
+			<section data-markdown>
+				<script type="text/template">
+					### Integration tests
+					* goal of 80% test coverage for the Hoot UI code
+					* existing iD editor codebase has mocha unit tests, but most of the UI code is not very amenable to unit testing
+					* ADVANTAGE: exercises the core and services, not lots of components to mock <!-- .element: class="fragment" -->
+					* DISADVANTAGE: it runs slow and it breaks often... <!-- .element: class="fragment" -->
+					* ...but we are still learning the ropes <!-- .element: class="fragment" -->
+				</script>
+			</section>
+			<section>
+				<h3>BDD Ideal Cucumber Scenario</h3>
+			    <pre><code data-trim data-noescape>
+Feature: Conflate feature with stats
+
+  Scenario: I can conflate the AllDataTypes data
+    Given I am on Hootenanny
+    And I add the "AllDataTypesACucumber" Reference Dataset
+			    </code></pre>
+				<ul>
+					<li>reads like a use case</li>
+					<li>written by a business analyst</li>
+					<li>understandable by a systems engineer</li>
+				</ul>
+			</section>
+			<section>
+				<h4>Cucumber Scenario written by web developers</h4>
+			    <pre><code data-trim data-noescape>
+Feature: Conflate feature with stats
+
+  Scenario: I can conflate the AllDataTypes data
+    Given I am on Hootenanny
+    And I resize the window
+    And I click Get Started
+    And I press "Add Reference Dataset"
+    And I click the "AllDataTypesACucumber" Dataset
+    And I press "Add Layer"
+    Then I wait 30 "seconds" to see "AllDataTypesACucumber"
+			    </code></pre>
+				<ul>
+					<li>more granular</li>
+					<li>step-by-step buttonology</li>
+					<li>but probably still acceptable</li>
+				</ul>
+			</section>
+			<section data-markdown>
+				<script type="text/template">
+					### Code Coverage
+					* goal of 80% test coverage for the Hoot UI code
+					* existing iD editor codebase has mocha unit tests, but most of the Hoot UI code is not very amenable to unit testing
+				</script>
+			</section>
+			<section>
+				<h4>Cucumber Scenario gone off the rails</h4>
+			    <pre><code data-trim data-noescape>
+    Scenario: Filter Bookmarks
+        Then I select the "sprocket" div
+        And I click on the "Review Bookmarks" option in
+        	the "settingsSidebar"
+        Then I select the "reviewBookmarksFilterByMapIdDiv" div
+        Then I click the "mergedBookmarkTest" link
+        	under "reviewBookmarksFilterByMapIdDiv"
+        And I should see "Cucumber Bookmark"
+			    </code></pre>
+				<ul>
+					<li>css and implementation details leaking up into the steps</li>
+					<li>impossible to write or understand without using the UI inspector</li>
+					<li>we know we're doing it wrong...</li>
+					<li>...but we'll get better</li>
+				</ul>
+			</section>
+			<section>
+				<h4>Implementing a custom step with Capybara</h4>
+			    <pre><code data-trim data-noescape>
+And I select the "File (osm)" option in
+	the "Select Import Type" combobox
+			    </code></pre>
+
+			    <pre><code data-trim data-noescape>
+When(/^I select the "([^"]*)" option in the "([^"]*)" combobox$/)
+	do |opt, cb|
+  combobox = page.find(:css, 'input[placeholder="' + cb + '"]')
+  combobox.find(:xpath, '..').find('.combobox-caret').click
+  page.find('div.combobox').find('a', :text=> opt).click
+end
+			    </code></pre>
+			</section>
+			<section data-markdown>
+				<script type="text/template">
+					### Code Coverage
+					* goal of 80% test coverage for the Hoot UI code
+					* existing iD editor codebase has mocha unit tests, but most of the Hoot UI code is not very amenable to unit testing
+				</script>
+			</section>
 			</div>
 		</div>
 
