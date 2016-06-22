@@ -106,13 +106,6 @@ Feature: Conflate feature with stats
 					<li>but probably still acceptable</li>
 				</ul>
 			</section>
-			<section data-markdown>
-				<script type="text/template">
-					### Code Coverage
-					* goal of 80% test coverage for the Hoot UI code
-					* existing iD editor codebase has mocha unit tests, but most of the Hoot UI code is not very amenable to unit testing
-				</script>
-			</section>
 			<section>
 				<h4>Cucumber Scenario gone off the rails</h4>
 			    <pre><code data-trim data-noescape>
@@ -123,10 +116,9 @@ Feature: Conflate feature with stats
         Then I select the "reviewBookmarksFilterByMapIdDiv" div
         Then I click the "mergedBookmarkTest" link
         	under "reviewBookmarksFilterByMapIdDiv"
-        And I should see "Cucumber Bookmark"
 			    </code></pre>
 				<ul>
-					<li>css and implementation details leaking up into the steps</li>
+					<li>css details leaking up into the steps</li>
 					<li>impossible to write or understand without using the UI inspector</li>
 					<li>we know we're doing it wrong...</li>
 					<li>...but we'll get better</li>
@@ -148,33 +140,57 @@ When(/^I select the "([^"]*)" option in the "([^"]*)" combobox$/)
 end
 			    </code></pre>
 			</section>
-			<section data-markdown>
-				<script type="text/template">
-					### Code Coverage
-					* goal of 80% test coverage for the Hoot UI code
-					* existing iD editor codebase has mocha unit tests, but most of the Hoot UI code is not very amenable to unit testing
-				</script>
-			</section>
 			<section>
 				<h4>Cucumber in Action!</h4>
-			    <img src="img/cucumber.gif" >				
+			    <img src="img/cucumber.gif" >
 			</section>
 			<section>
 				<h4>Successful Step</h4>
 			    <img src="img/success.png" >
-			</section>			
+			</section>
 			<section>
 				<h4>Unsuccessful Step</h4>
 			    <img src="img/error.png" >
-			</section>				
+			</section>
 			<section>
 				<h4>Missing Step</h4>
-			    <img src="img/nostep-1.png" >				
-			    <img src="img/nostep-2.png" >	
+			    <img src="img/nostep-1.png" >
+			    <img src="img/nostep-2.png" >
 			</section>
 			<section>
 				<h4>Summary Stats</h4>
-			    <img src="img/stats.png" >				
+			    <img src="img/stats.png" >
+			</section>
+			<section data-markdown>
+				<script type="text/template">
+					### Istanbul
+					* instruments js code to collect coverage stats
+					* has a middleware server that can aggregate stats data
+					* will generate coverage reports in multiple formats
+					* using mutiple sources of coverage data (in our case mocha and cucumber)
+				</script>
+			</section>
+			<section data-markdown>
+				<script type="text/template">
+					### Coverage Steps for Hoot UI
+					* deploy instrumented code to tomcat
+					* start Istanbul middleware server
+					* run Cucumber tests with after-scenario hook to POST stats data to middleware
+					* download stats from middleware
+					* generate report using both coverage data sources
+				</script>
+			</section>
+			<section>
+				<h4>Hoot UI Code Coverage</h4>
+			    <img src="img/coverage.png" >
+			</section>
+			<section>
+				<h4>Drill down to file coverage</h4>
+			    <img src="img/coverage-files.png" >
+			</section>
+			<section>
+				<h4>Line coverage within a file</h4>
+			    <img src="img/coverage-file.png" >
 			</section>
 			</div>
 		</div>
