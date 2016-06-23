@@ -56,9 +56,9 @@
 			<section data-markdown>
 				<script type="text/template">
 					### Cucumber with Capybara
-					* testing stack primarily written for/used by the ruby/rails community
+					* testing stack primarily written for/used by the Ruby/Rails community
 					* there are lots of test framework choices out there
-					* an intrepid hoot developer wrote some example tests using this so here we are
+					* an intrepid hoot developer wrote some example tests using this _so here we are_
 				</script>
 			</section>
 			<section data-markdown>
@@ -66,7 +66,7 @@
 					### Integration tests
 					* goal of 80% test coverage for the Hoot UI code
 					* existing iD editor codebase has mocha unit tests, but most of the UI code is not very amenable to unit testing
-					* ADVANTAGE: exercises the core and services, not lots of components to mock <!-- .element: class="fragment" -->
+					* ADVANTAGE: exercises the core and services  and not lots of components to mock <!-- .element: class="fragment" -->
 					* DISADVANTAGE: it runs slow and it breaks often... <!-- .element: class="fragment" -->
 					* ...but we are still learning the ropes <!-- .element: class="fragment" -->
 				</script>
@@ -83,7 +83,7 @@ Feature: Conflate feature with stats
 				<ul>
 					<li>reads like a use case</li>
 					<li>written by a business analyst</li>
-					<li>understandable by a systems engineer</li>
+					<li>understandable by a user</li>
 				</ul>
 			</section>
 			<section>
@@ -126,17 +126,34 @@ Feature: Conflate feature with stats
 			</section>
 			<section>
 				<h4>Implementing a custom step with Capybara</h4>
+				<p>Step:</p>
 			    <pre><code data-trim data-noescape>
 And I select the "File (osm)" option in
 	the "Select Import Type" combobox
 			    </code></pre>
-
+				<p>Definition:</p>
 			    <pre><code data-trim data-noescape>
 When(/^I select the "([^"]*)" option in the "([^"]*)" combobox$/)
 	do |opt, cb|
   combobox = page.find(:css, 'input[placeholder="' + cb + '"]')
   combobox.find(:xpath, '..').find('.combobox-caret').click
   page.find('div.combobox').find('a', :text=> opt).click
+end
+			    </code></pre>
+			</section>
+			<section>
+				<h4>Another Example</h4>
+				<p>You can use Ruby code in the step definition</p>
+				<p>Step:</p>
+			    <pre><code data-trim data-noescape>
+    Then the download file "export_conflated.zip" should exist
+			    </code></pre>
+				<p>Definition:</p>
+			    <pre><code data-trim data-noescape>
+Then(/^the download file "([^"]*)" should exist$/) do |file|
+  name = ENV['HOME'] + '/Downloads/' + file
+  expect( File.exists?(name) ).to be true
+  File.delete(name)
 end
 			    </code></pre>
 			</section>
@@ -151,6 +168,7 @@ end
 			<section>
 				<h4>Unsuccessful Step</h4>
 			    <img src="img/error.png" >
+			    <p>Screenshot plugin will capture UI at points of test failure</p>
 			</section>
 			<section>
 				<h4>Missing Step</h4>
@@ -166,8 +184,9 @@ end
 					### Istanbul
 					* instruments js code to collect coverage stats
 					* has a middleware server that can aggregate stats data
-					* will generate coverage reports in multiple formats
-					* using mutiple sources of coverage data (in our case mocha and cucumber)
+					* will generate coverage reports in multiple formats...
+					 ...using mutiple sources of coverage data
+					 (in our case mocha and cucumber)
 				</script>
 			</section>
 			<section data-markdown>
@@ -192,6 +211,17 @@ end
 				<h4>Line coverage within a file</h4>
 			    <img src="img/coverage-file.png" >
 			</section>
+            <section data-markdown>
+                <script type="text/template">
+                    ### Conclusion
+                    * Cucumber Integration Tests provide end-to-end testing
+                    * They are the easiest approach to increase test coverage
+                    * Coverage reports then show the exact gaps in test coverage...
+
+                    	...down to the line in the source file
+                    * This can be used to guide tasks to write future tests
+               </script>
+            </section>
 			</div>
 		</div>
 
